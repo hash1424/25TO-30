@@ -1,0 +1,750 @@
+
+package com.DSA_25_30_April;
+
+
+
+
+class Node1 {
+	int data;
+	Node1 next;
+
+	Node1(int data, Node1 next) {
+		this.data = data;
+		this.next = next;
+	}
+}
+
+public class Apr25 {
+	static Node head;
+	static Node1 head1;
+
+	public static void main(String[] args) {
+		for (int i = 25; i >= 5; i -= 5) {
+			addFirst(i);
+		}
+		display();
+		findKthFromLast(2);
+
+
+		int traverseFrom=3;
+		printList("Original linked list: ", head);
+		head = computeReversal(head,traverseFrom);
+		printList("Reversed linked list: ", head);
+	}
+
+	public static Node computeReversal(Node head,int from) {
+		int count=countNodes(head);
+		return reverse(head,count-from+1, count);
+	}
+
+	public static void printList(String msg, Node head) {
+		System.out.print(msg);
+
+		Node ptr = head;
+		while (ptr != null) {
+			System.out.print(ptr.data + " �> ");
+			ptr = ptr.next;
+		}
+
+		System.out.println("null");
+	}
+	public static int countNodes(Node head) {
+		int count=0;
+		Node ptr = head;
+		while (ptr != null) {
+			count++;
+			ptr = ptr.next;
+		}
+		return count;
+	}
+
+	public static Node reverse(Node head, int m, int n) {
+		if (m > n) {
+			return head;
+		}
+
+		Node prev = null;
+		Node curr = head;
+
+		for (int i = 1; curr != null && i < m; i++) {
+			prev = curr;
+			curr = curr.next;
+		}
+
+		Node start = curr;
+		Node end = null;
+
+		for (int i = 1; curr != null && i <= n - m + 1; i++) {
+			Node next = curr.next;
+
+			curr.next = end;
+			end = curr;
+
+			curr = next;
+		}
+
+		if (start != null) {
+			start.next = curr;
+			if (prev != null) {
+				prev.next = end;
+			} else {
+				head = end;
+			}
+		}
+
+		return head;
+	}
+
+	public static void addFirst(int data) {
+
+		Node newNode = new Node(data);
+		if (head == null) {
+			head = newNode;
+		} else {
+			newNode.next = head;
+			head = newNode;
+		}
+	}
+
+	public static void display() {
+		if (head == null) {
+			System.out.println("List is empty! ");
+		} else {
+			Node cur = head;
+			while (cur != null) {
+				System.out.print(cur.data + " ");
+				cur = cur.next;
+			}
+			System.out.println();
+		}
+	}
+
+	public static void findKthFromLast(int k) {
+		if (head == null || head.next == null) {
+			System.out.println("List is empty");
+		} else { // Two traversal by calculating length
+			int length = 0;
+			Node currNode = head;
+			Node nextNode = head;
+			while (currNode != null) {
+				length++;
+				currNode = currNode.next;
+			}
+			if (k > length) {
+				System.out.println(-1);
+			} else {
+				length = length - k;
+				for (int i = 0; i < length; i++) {
+					nextNode = nextNode.next;
+				}
+			}
+			System.out.println("The " + k + " Node from last is " + nextNode.data);
+		}
+	}
+} 
+ 105  
+Apr26.java
+@@ -0,0 +1,105 @@
+package com.DSA_25_30_April;
+
+
+
+import java.util.Stack;
+
+class ListNode {
+	int val;
+	ListNode next;
+
+	ListNode(int x) {
+		val = x;
+		next = null;
+	}
+}
+
+public class Apr26 {
+	static ListNode head;
+
+	public static void main(String[] args) {
+		ListNode listA = new ListNode(4);
+		listA.next = new ListNode(1);
+		listA.next.next = new ListNode(8);
+		listA.next.next.next = new ListNode(4);
+		listA.next.next.next.next = new ListNode(5);
+
+		display(listA);
+
+		ListNode listB = new ListNode(5);
+		listB.next = new ListNode(6);
+		listB.next.next = new ListNode(1);
+		listB.next.next.next = new ListNode(8);
+		listB.next.next.next.next = new ListNode(4);
+		listB.next.next.next.next.next = new ListNode(5);
+
+		display(listB);
+
+		System.out.println(getIntersectionNode(listA, listB));
+
+		Node head1 = new Node(10);
+        head1.next = new Node(20);
+        head1.next.next = new Node(30);
+        head1.next.next.next = new Node(40);
+        head1.next.next.next.next = new Node(50);
+		System.out.println(isPalindrome(head1));
+
+	}
+
+	public static void display(ListNode head) {
+		if (head == null) {
+			System.out.println("List is empty! ");
+		} else {
+			ListNode currNode = head;
+			while (currNode != null) {
+				System.out.print(currNode.val + " -> ");
+				currNode = currNode.next;
+			}
+			System.out.println("Null");
+		}
+	}
+
+	public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+		if (headA == null || headB == null)
+			return null;
+		ListNode temp = headA;
+		ListNode temp1 = headB;
+		while (temp != temp1) {
+			if (temp1 == null)
+				temp1 = headA;
+			else
+				temp1 = temp1.next;
+			if (temp == null)
+				temp = headB;
+			else
+				temp = temp.next;
+
+		}
+		return temp;
+	}
+
+	static boolean isPalindrome(Node head) {
+
+		Node slow = head;
+		boolean ispalin = true;
+		Stack<Integer> stack = new Stack<Integer>();
+
+		while (slow != null) {
+			stack.push(slow.data);
+			slow = slow.next;
+		}
+
+		while (head != null) {
+
+			int i = stack.pop();
+			if (head.data == i) {
+				ispalin = true;
+			} else {
+				ispalin = false;
+				break;      
+			}
+			head = head.next;
+		}
+		return ispalin;
+	}
+} 
+ 119  
+Apr27.java
+@@ -0,0 +1,119 @@
+package com.DSA_25_30_April;
+
+package LinkedList;
+import java.util.LinkedList;
+
+public class Apr27 {
+	static DNode head;
+	public static void main(String[] args) {
+		Node head=new Node(10);
+		head.next=new Node(20);
+		head.next.next=new Node(30);
+
+		Node last=head.next.next;
+		last.next=head;
+
+		addFirst(10);
+		addFirst(20);
+		addFirst(30);
+
+		addLast(50);
+		addLast(55);
+
+        display();
+        getSize();
+        greaterThan25();
+
+	}
+
+	    public static void addFirst(int data){
+	        DNode newNode = new DNode(data);
+	        if (head==null){
+	            head = newNode;
+	        }
+	        else {
+	            head.prev = newNode;
+	            newNode.next = head;
+	            head = newNode;
+	        }
+	    }
+	    public static void display(){
+	        if (head==null){
+	            System.out.println("List is empty! ");
+	        }
+	        else{
+	            DNode curr = head;
+	            while (curr!=null){
+	                System.out.print(curr.data+" ");
+	                curr = curr.next;
+	            }
+	            System.out.println("Null");
+	        }
+	    }
+	    public static void getSize(){
+	        int size = 0;
+	        if (head==null){
+	            System.out.println("List is empty! ");
+	        }
+	        else {
+	            DNode curr = head;
+	            while (curr!=null){
+	                size++;
+	                curr = curr.next;
+	            }
+	        }
+	        System.out.println("The size of the list is: "+size);
+	    }
+	    public static void greaterThan25(){
+	        if (head==null){
+	            System.out.println("List is empty! ");
+	        }
+	        else{
+	            DNode curr = head;
+	            while (curr!=null ){
+	                if (curr.data<25) {
+	                    System.out.print(curr.data + " ");
+	                }
+	                curr = curr.next;
+	            }
+	        }
+	    }
+	private static void addFirst1(int data) {
+		DNode new_Node=new DNode(data); 
+        if (head == null) {
+            head = new_Node; 
+        }else {
+    		new_Node.next = head;
+    		new_Node.prev = new_Node;    		
+            head = new_Node; 
+        }
+	}
+
+	private static void addLast(int data) {
+		DNode new_Node=new DNode(data); 
+        if (head == null) {
+        	return;
+        }else {
+        	DNode cur=head;
+        	while(cur.next!=null) {
+        		cur=cur.next;
+        	}
+        	cur.next=new_Node;
+        	new_Node.prev=cur;
+        }
+	}
+
+	private static boolean isCyclic(Node head) {
+		Node slow = head, fast = head;
+		while( fast != null && fast.next != null ) {
+			slow = slow.next;
+			fast = fast.next.next;
+			if( slow == fast ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+} 
+ 99  
+Apr28.java
+@@ -0,0 +1,99 @@
+package com.DSA_25_30_April;
+
+
+import java.util.Arrays;
+
+class Stack
+{
+    private int arr[];
+    private int top;
+    private int capacity;
+
+    Stack(int size)
+    {
+        arr = new int[size];
+        capacity = size;
+        top = -1;
+    }
+
+    public void push(int x)
+    {
+        if (isFull())
+        {
+            System.out.println("Overflow\nProgram Terminated\n");
+            System.exit(-1);
+        }
+
+        System.out.println("Inserting " + x);
+        arr[++top] = x;
+    }
+
+    public int pop()
+    {
+        if (isEmpty())
+        {
+            System.out.println("Underflow\nProgram Terminated");
+            System.exit(-1);
+        }
+
+        System.out.println("Removing " + peek());
+
+        return arr[top--];
+    }
+
+    public int peek()
+    {
+        if (!isEmpty()) {
+            return arr[top];
+        }
+        else {
+            System.exit(-1);
+        }
+
+        return -1;
+    }
+
+    public int size() {
+        return top + 1;
+    }
+
+    public boolean isEmpty() {
+        return top == -1;          
+    }
+
+    public boolean isFull() {
+        return top == capacity - 1;   
+    }
+    public String toString() {
+    	return Arrays.toString(arr);   
+    }
+}
+public class Apr28 {
+	static Stack s=new Stack(6);
+	public static void main(String[] args) {
+
+        int a[] = {0,0,1,1,2,2,3,4,5,5};
+
+
+        System.out.println("After Removing Duplicates:"+removeDuplicates(a));
+    }
+
+	private static String removeDuplicates(int[] a) {
+        for(int i =0;i<a.length;i++)
+        {
+            if(s.isEmpty())
+            {
+                s.push(a[i]);
+            }
+
+            else {
+                int val = s.peek();
+                if(val != a[i])
+                {
+                    s.push(a[i]);
+                }
+            }
+        }
+		return s.toString();
+	}
+} 
+ 118  
+Apr29.java
+@@ -0,0 +1,118 @@
+package com.DSA_25_30_April;
+
+/*"""1. Evaluate a postfix expression
+https://www.techiedelight.com/evaluate-given-postfix-expression/
+2. Basic Calculator
+https://leetcode.com/problems/basic-calculator-ii/"""
+*/
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
+public class Apr29 {
+	public static void main(String[] args) {
+		System.out.println(calculate("3+5 / 2"));
+		System.out.println(evalPostfix("138*+"));
+	}
+
+	public static int evalPostfix(String exp) {
+		if (exp == null || exp.length() == 0) {
+			System.exit(-1);
+		}
+
+		Stack<Integer> stack = new Stack<>();
+
+		for (char c : exp.toCharArray()) {
+			if (Character.isDigit(c)) {
+				stack.push(c - '0');
+			} else {
+				int x = stack.pop();
+				int y = stack.pop();
+
+				if (c == '+') {
+					stack.push(y + x);
+				} else if (c == '-') {
+					stack.push(y - x);
+				} else if (c == '*') {
+					stack.push(y * x);
+				} else if (c == '/') {
+					stack.push(y / x);
+				}
+			}
+		}
+
+		return stack.pop();
+	}
+
+	public int calculate1(String s) {
+		s = s.replaceAll("\\s+", "");
+		Set<String> operands = new HashSet<>(Arrays.asList("+", "-", "/", "*"));
+		Stack<String> stack = new Stack<>();
+		int res = 0;
+		for (int i = 0; i < s.length();) {
+			int j = i;
+			while (j < s.length() && !operands.contains(s.charAt(j) + ""))
+				++j;
+			if (i != j) {
+				String num = s.substring(i, j);
+				if (stack.size() > 0 && operands.contains(stack.peek())) {
+					String operand = stack.pop();
+					int temp = 0;
+					if (operand.equals("+"))
+						temp = Integer.parseInt(num);
+					if (operand.equals("-"))
+						temp = -1 * Integer.parseInt(num);
+					if (operand.equals("/"))
+						temp = Integer.parseInt(stack.pop()) / Integer.parseInt(num);
+					if (operand.equals("*"))
+						temp = Integer.parseInt(stack.pop()) * Integer.parseInt(num);
+					stack.push(temp + "");
+				} else
+					stack.push(num);
+				i = j;
+			} else {
+				stack.push(s.charAt(i) + "");
+				i++;
+			}
+		}
+		while (!stack.isEmpty())
+			res += Integer.parseInt(stack.pop());
+		return res;
+	}
+
+	private static int calculate(String s) {
+		int currNo = 0;
+		char op = '+';
+		int len = s.length();
+		Stack<Integer> stack = new Stack<>();
+
+		for (int i = 0; i < len; i++) {
+			char ch = s.charAt(i);
+
+			if (Character.isDigit(ch)) {
+				currNo = (currNo * 10) + (ch - '0');
+			}
+
+			if (!Character.isDigit(ch) && ch != ' ' || i == len - 1) {
+				if (op == '+') {
+					stack.push(currNo);
+				} else if (op == '-') {
+					stack.push(-currNo);
+				} else if (op == '*') {
+					stack.push(stack.pop() * currNo);
+				} else if (op == '/') {
+					stack.push(stack.pop() / currNo);
+				}
+				currNo = 0;
+				op = ch;
+			}
+		}
+		int sum = 0;
+		while (!stack.isEmpty()) {
+			sum += stack.pop();
+		}
+		return sum;
+	}
+} 
+ 151  
+Apr30.java
+@@ -0,0 +1,151 @@
+package com.DSA_25_30_April;
+
+//"""Implement a queue data structure using the following data structure:  
+//1. Arrays
+//2. LinkedList """
+class Queue {
+	private static int front, rear, capacity;
+	private static int queue[];
+
+	Queue(int c) {
+		front = rear = 0;
+		capacity = c;
+		queue = new int[capacity];
+	}
+
+	static void queueEnqueue(int data) {
+		if (capacity == rear) {
+			System.out.printf("\nQueue is full\n");
+			return;
+		}
+
+		else {
+			queue[rear] = data;
+			rear++;
+		}
+		return;
+	}
+
+	static void queueDequeue() {
+		if (front == rear) {
+			System.out.printf("\nQueue is empty\n");
+			return;
+		}
+
+		else {
+			for (int i = 0; i < rear - 1; i++) {
+				queue[i] = queue[i + 1];
+			}
+
+			if (rear < capacity)
+				queue[rear] = 0;
+
+			rear--;
+		}
+		return;
+	}
+
+	static void queueDisplay() {
+		int i;
+		if (front == rear) {
+			System.out.printf("\nQueue is Empty\n");
+			return;
+		}
+
+		for (i = front; i < rear; i++) {
+			System.out.printf(" %d <-- ", queue[i]);
+		}
+		return;
+	}
+
+	static void queueFront() {
+		if (front == rear) {
+			System.out.printf("\nQueue is Empty\n");
+			return;
+		}
+		System.out.printf("\nFront Element is: %d", queue[front]);
+		return;
+	}
+}
+class QNode {
+  int key;
+  QNode next;
+
+  public QNode(int key)
+  {
+      this.key = key;
+      this.next = null;
+  }
+}
+class Queue1 {
+  QNode front, rear;
+
+  public Queue1()
+  {
+      this.front = this.rear = null;
+  }
+
+  void enqueue(int key)
+  {
+
+      QNode temp = new QNode(key);
+
+      if (this.rear == null) {
+          this.front = this.rear = temp;
+          return;
+      }
+
+      this.rear.next = temp;
+      this.rear = temp;
+  }
+
+  void dequeue()
+  {
+      if (this.front == null)
+          return;
+
+      QNode temp = this.front;
+      this.front = this.front.next;
+
+      if (this.front == null)
+          this.rear = null;
+  }
+}
+public class Apr30 {
+	public static void main(String[] args) {
+		//Arrays
+		Queue q = new Queue(4);
+
+		q.queueDisplay();
+
+		q.queueEnqueue(20);
+		q.queueEnqueue(30);
+		q.queueEnqueue(40);
+		q.queueEnqueue(50);
+		q.queueDisplay();
+
+		q.queueEnqueue(60);
+
+		q.queueDisplay();
+
+		q.queueDequeue();
+		q.queueDequeue();
+		System.out.printf("\nAfter two node deletion\n");
+		q.queueDisplay();
+
+		q.queueFront();
+
+		//LinkedList
+		Queue1 q1 = new Queue1();
+      q1.enqueue(10);
+      q1.enqueue(20);
+      q1.dequeue();
+      q1.dequeue();
+      q1.enqueue(30);
+      q1.enqueue(40);
+      q1.enqueue(50);
+      q1.dequeue();
+      System.out.println("\nQueue Front : " + q1.front.key);
+      System.out.println("Queue Rear : " + q1.rear.key);
+	}
+} 
